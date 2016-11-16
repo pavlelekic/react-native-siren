@@ -19,7 +19,7 @@ const createAPI = (baseURL = 'https://itunes.apple.com/') => {
   }
 }
 
-const performCheck = () => {
+export function performCheck() {
   let updateIsAvailable = false
   const api = createAPI()
   const bundleId = DeviceInfo.getBundleId()
@@ -38,7 +38,7 @@ const performCheck = () => {
   })
 }
 
-const attemptUpgrade = (appId) => {
+export function attemptUpgrade(appId) {
   // failover if itunes - a bit excessive
   const itunesURI = `itmss://itunes.apple.com/app/id${appId}?mt=8`
   const itunesURL = `https://itunes.apple.com/app/id${appId}?mt=8`
@@ -51,25 +51,3 @@ const attemptUpgrade = (appId) => {
     }
   })
 }
-
-const showUpgradePrompt = (appId) => {
-  Alert.alert(
-    'Update Available',
-    'There is an updated version available on the App Store.  Would you like to upgrade?',
-    [
-      {text: 'Upgrade', onPress: () => attemptUpgrade(appId)},
-      {text: 'Cancel'}
-    ]
-  )
-}
-
-const promptUser = () => {
-  performCheck().then(sirenResult => {
-    if (sirenResult.updateIsAvailable) showUpgradePrompt(sirenResult.trackId)
-  })
-}
-
-export default {
-  promptUser
-}
-
